@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage'
 import BMICalculatorPage from './pages/BMICalculatorPage'
 import TreadmillCalculatorPage from './pages/TreadmillCalculatorPage'
 import MealIntakeCalculatorPage from './pages/MealIntakeCalculatorPage'
+import CalorieBurnedCalculatorPage from './pages/CalorieBurnedCalculatorPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
             <Route path="/bmi-calculator" element={<BMICalculatorPage />} />
             <Route path="/treadmill-calculator" element={<TreadmillCalculatorPage />} />
             <Route path="/meal-intake-calculator" element={<MealIntakeCalculatorPage />} />
+            <Route path="/calorie-burned-calculator" element={<CalorieBurnedCalculatorPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>

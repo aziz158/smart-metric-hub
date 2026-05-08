@@ -8,6 +8,7 @@ const navLinks = [
   { to: '/bmi-calculator', label: 'BMI' },
   { to: '/treadmill-calculator', label: 'Treadmill' },
   { to: '/meal-intake-calculator', label: 'Meal Intake' },
+  { to: '/calorie-burned-calculator', label: 'Calories' },
 ]
 
 export default function Header() {

@@ -36,10 +36,10 @@ const calculators = [
   },
   {
     icon: TbFlame,
-    title: 'Calorie Calculator',
-    description: 'Find your daily calorie needs based on your activity level and fitness goals.',
-    to: '/calorie-calculator',
-    available: false,
+    title: 'Calorie Burned Calculator',
+    description: 'Estimate calories burned during 17 activities using MET-based calculations.',
+    to: '/calorie-burned-calculator',
+    available: true,
   },
   {
     icon: TbDroplet,
