@@ -14,6 +14,7 @@ import {
   calcCalories, getActivity, getIntensity, PRESETS,
 } from '../utils/treadmillCalc'
 import PageTransition from '../components/PageTransition'
+import ScrollFade from '../components/ScrollFade'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -609,10 +610,12 @@ export default function TreadmillCalculatorPage() {
       </div>
 
       {/* Info footer */}
+      <ScrollFade>
       <p className="mt-6 text-xs text-gray-400 text-center leading-relaxed">
         Calorie estimates are based on MET values adjusted for speed and incline. Results are approximations
         and may vary based on individual fitness level and treadmill calibration.
       </p>
+      </ScrollFade>
 
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }

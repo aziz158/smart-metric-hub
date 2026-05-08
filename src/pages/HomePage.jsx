@@ -1,5 +1,6 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { TbRulerMeasure, TbWalk, TbSalad, TbDroplet, TbFlame, TbArrowRight } from 'react-icons/tb'
 import { GiMuscleUp } from 'react-icons/gi'
 import { HiSparkles } from 'react-icons/hi'
@@ -57,7 +58,7 @@ const stats = [
   { value: '0', label: 'Sign-ups Needed' },
 ]
 
-// ─── Animation variants ───────────────────────────────────────────────────────
+// ─── Animation variants (once: false → reverse on scroll-out) ─────────────────
 
 const heroContent = {
   hidden: {},
@@ -70,7 +71,7 @@ const heroItem = {
 
 const cardGrid = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
 }
 const cardItem = {
   hidden: { opacity: 0, y: 24, scale: 0.97 },
@@ -79,7 +80,7 @@ const cardItem = {
 
 const stepsGrid = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
 }
 const stepItem = {
   hidden: { opacity: 0, y: 20 },
@@ -87,11 +88,22 @@ const stepItem = {
 }
 
 export default function HomePage() {
+  const heroRef = useRef(null)
+
+  // Scroll-linked fade for the hero section as it leaves the viewport
+  const { scrollY } = useScroll()
+  const heroOpacity = useTransform(scrollY, [0, 320], [1, 0])
+  const heroY       = useTransform(scrollY, [0, 320], [0, -40])
+
   return (
     <PageTransition>
       <div>
-        {/* Hero */}
-        <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white overflow-hidden">
+        {/* ── Hero ─────────────────────────────────────────────────────────── */}
+        <motion.section
+          ref={heroRef}
+          style={{ opacity: heroOpacity, y: heroY }}
+          className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white overflow-hidden"
+        >
           <motion.div
             className="max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center"
             variants={heroContent}
@@ -136,7 +148,6 @@ export default function HomePage() {
               </a>
             </motion.div>
 
-            {/* Stats */}
             <motion.div
               variants={heroItem}
               className="flex flex-col sm:flex-row items-center justify-center gap-8 mt-16"
@@ -149,15 +160,15 @@ export default function HomePage() {
               ))}
             </motion.div>
           </motion.div>
-        </section>
+        </motion.section>
 
-        {/* Calculators grid */}
+        {/* ── Calculator cards ──────────────────────────────────────────────── */}
         <section id="calculators" className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
           <motion.div
             className="text-center mb-12"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
+            viewport={{ once: false, margin: '-60px' }}
             transition={{ duration: 0.4 }}
           >
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Calculator Tools</h2>
@@ -171,7 +182,7 @@ export default function HomePage() {
             variants={cardGrid}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true, margin: '-40px' }}
+            viewport={{ once: false, margin: '-40px' }}
           >
             {calculators.map((calc) => (
               <motion.div key={calc.title} variants={cardItem}>
@@ -181,14 +192,14 @@ export default function HomePage() {
           </motion.div>
         </section>
 
-        {/* How it works */}
+        {/* ── How it works ─────────────────────────────────────────────────── */}
         <section className="bg-gray-50 border-y border-gray-100">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
             <motion.div
               className="text-center mb-12"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false, margin: '-60px' }}
               transition={{ duration: 0.4 }}
             >
               <h2 className="text-3xl font-bold text-gray-900">How It Works</h2>
@@ -199,7 +210,7 @@ export default function HomePage() {
               variants={stepsGrid}
               initial="hidden"
               whileInView="show"
-              viewport={{ once: true, margin: '-40px' }}
+              viewport={{ once: false, margin: '-40px' }}
             >
               {[
                 { step: '1', title: 'Choose a Calculator', desc: 'Pick a tool from the homepage that matches your health or fitness need.' },

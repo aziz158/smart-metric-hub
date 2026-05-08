@@ -11,6 +11,7 @@ import {
 } from '../utils/calorieCalc'
 import { lbsToKg, milesToKm, kmToMiles } from '../utils/treadmillCalc'
 import PageTransition from '../components/PageTransition'
+import ScrollFade from '../components/ScrollFade'
 
 // ─── Shared UI ────────────────────────────────────────────────────────────────
 
@@ -227,6 +228,7 @@ export default function CalorieBurnedCalculatorPage() {
       </div>
 
       {/* ── Calculator inputs ─────────────────────────────────────────────── */}
+      <ScrollFade>
       <div className="card space-y-6 mb-5">
         <h2 className="text-base font-semibold text-gray-800">2. Enter Your Details</h2>
 
@@ -317,6 +319,7 @@ export default function CalorieBurnedCalculatorPage() {
           </div>
         )}
       </div>
+      </ScrollFade>
 
       {/* ── Live results ──────────────────────────────────────────────────── */}
       {!activity && (

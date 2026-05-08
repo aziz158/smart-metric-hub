@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { HiArrowLeft, HiRefresh, HiCalculator } from 'react-icons/hi'
 import BMIGauge from '../components/BMIGauge'
 import PageTransition from '../components/PageTransition'
+import ScrollFade from '../components/ScrollFade'
 
 // ─── BMI logic ────────────────────────────────────────────────────────────────
 
@@ -275,7 +276,8 @@ export default function BMICalculatorPage() {
       </AnimatePresence>
 
       {/* Reference table */}
-      <div className="mt-8 card">
+      <ScrollFade className="mt-8">
+      <div className="card">
         <h2 className="text-base font-semibold text-gray-800 mb-4">BMI Categories Reference</h2>
         <div className="space-y-2">
           {[
@@ -299,6 +301,7 @@ export default function BMICalculatorPage() {
           BMI is a screening tool, not a diagnostic measure. Consult a healthcare provider for a thorough assessment.
         </p>
       </div>
+      </ScrollFade>
 
     </div>
     </PageTransition>
