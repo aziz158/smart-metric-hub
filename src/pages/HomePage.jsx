@@ -92,8 +92,8 @@ export default function HomePage() {
 
   // Scroll-linked fade for the hero section as it leaves the viewport
   const { scrollY } = useScroll()
-  const heroOpacity = useTransform(scrollY, [0, 320], [1, 0])
-  const heroY       = useTransform(scrollY, [0, 320], [0, -40])
+  const heroOpacity = useTransform(scrollY, [160, 560], [1, 0])
+  const heroY       = useTransform(scrollY, [160, 560], [0, -40])
 
   return (
     <PageTransition>
