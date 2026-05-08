@@ -1,8 +1,7 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { TbRulerMeasure, TbWalk, TbSalad, TbDroplet, TbFlame, TbArrowRight } from 'react-icons/tb'
-import { GiMuscleUp } from 'react-icons/gi'
+import { TbRulerMeasure, TbWalk, TbSalad, TbDroplet, TbFlame, TbArrowRight, TbMoon } from 'react-icons/tb'
 import { HiSparkles } from 'react-icons/hi'
 import CalculatorCard from '../components/CalculatorCard'
 import PageTransition from '../components/PageTransition'
@@ -30,11 +29,11 @@ const calculators = [
     available: true,
   },
   {
-    icon: GiMuscleUp,
-    title: 'Macro Calculator',
-    description: 'Calculate your daily macronutrient targets for protein, carbs, and fats.',
-    to: '/macro-calculator',
-    available: false,
+    icon: TbMoon,
+    title: 'Sleep Calculator',
+    description: 'Find your ideal bedtime or wake-up time based on 90-minute sleep cycles.',
+    to: '/sleep-calculator',
+    available: true,
   },
   {
     icon: TbFlame,

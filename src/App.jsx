@@ -7,6 +7,7 @@ import BMICalculatorPage from './pages/BMICalculatorPage'
 import TreadmillCalculatorPage from './pages/TreadmillCalculatorPage'
 import MealIntakeCalculatorPage from './pages/MealIntakeCalculatorPage'
 import CalorieBurnedCalculatorPage from './pages/CalorieBurnedCalculatorPage'
+import SleepCalculatorPage from './pages/SleepCalculatorPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 function AnimatedRoutes() {
@@ -19,6 +20,7 @@ function AnimatedRoutes() {
         <Route path="/treadmill-calculator" element={<TreadmillCalculatorPage />} />
         <Route path="/meal-intake-calculator" element={<MealIntakeCalculatorPage />} />
         <Route path="/calorie-burned-calculator" element={<CalorieBurnedCalculatorPage />} />
+        <Route path="/sleep-calculator" element={<SleepCalculatorPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </AnimatePresence>
