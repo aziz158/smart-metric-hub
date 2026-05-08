@@ -18,7 +18,7 @@ const calculators = [
     title: 'Treadmill Calculator',
     description: 'Estimate calories burned and distance covered during treadmill workouts.',
     to: '/treadmill-calculator',
-    available: false,
+    available: true,
   },
   {
     icon: TbSalad,

@@ -5,7 +5,8 @@ import { TbMathFunction } from 'react-icons/tb'
 
 const navLinks = [
   { to: '/', label: 'Home' },
-  { to: '/bmi-calculator', label: 'BMI Calculator' },
+  { to: '/bmi-calculator', label: 'BMI' },
+  { to: '/treadmill-calculator', label: 'Treadmill' },
 ]
 
 export default function Header() {
