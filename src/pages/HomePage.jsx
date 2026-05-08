@@ -62,7 +62,7 @@ const stats = [
 
 const heroContent = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
 }
 const heroItem = {
   hidden: { opacity: 0, y: 22 },
@@ -108,7 +108,8 @@ export default function HomePage() {
             className="max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center"
             variants={heroContent}
             initial="hidden"
-            animate="show"
+            whileInView="show"
+            viewport={{ once: false, amount: 0.15 }}
           >
             <motion.div variants={heroItem}
               className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20
