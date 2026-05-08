@@ -25,7 +25,7 @@ const calculators = [
     title: 'Meal Intake Calculator',
     description: 'Plan your daily meal intake based on your nutritional goals and dietary needs.',
     to: '/meal-intake-calculator',
-    available: false,
+    available: true,
   },
   {
     icon: GiMuscleUp,
