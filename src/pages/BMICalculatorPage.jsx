@@ -1,7 +1,9 @@
 import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { HiArrowLeft, HiRefresh, HiCalculator } from 'react-icons/hi'
 import BMIGauge from '../components/BMIGauge'
+import PageTransition from '../components/PageTransition'
 
 // ─── BMI logic ────────────────────────────────────────────────────────────────
 
@@ -120,6 +122,7 @@ export default function BMICalculatorPage() {
   const styles = result ? CATEGORY_STYLES[result.category] : null
 
   return (
+    <PageTransition>
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
       {/* Back link */}
       <Link
@@ -236,29 +239,40 @@ export default function BMICalculatorPage() {
       </div>
 
       {/* Result */}
-      {result && (
-        <div
-          className={`mt-6 rounded-2xl border p-6 space-y-5 transition-all duration-300 animate-in
-                      ${styles.bg} ${styles.border}`}
-          style={{ animation: 'fadeSlideUp 0.3s ease-out' }}
-        >
-          <div className="flex items-start justify-between flex-wrap gap-4">
-            <div>
-              <p className="text-sm font-medium text-gray-500">Your BMI</p>
-              <p className={`text-6xl font-extrabold mt-1 ${styles.text}`}>{result.bmi}</p>
-            </div>
-            <span className={`text-lg font-bold px-4 py-2 rounded-xl ${styles.badge}`}>
-              {result.category}
-            </span>
-          </div>
+      <AnimatePresence mode="wait">
+        {result && (
+          <motion.div
+            key={result.category}
+            initial={{ opacity: 0, y: 18, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
+            transition={{ duration: 0.32, ease: [0.25, 0.1, 0.25, 1] }}
+            className={`mt-6 rounded-2xl border p-6 space-y-5 ${styles.bg} ${styles.border}`}
+          >
+            <motion.div
+              className="flex items-start justify-between flex-wrap gap-4"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
+            >
+              <div>
+                <p className="text-sm font-medium text-gray-500">Your BMI</p>
+                <p className={`text-6xl font-extrabold mt-1 ${styles.text}`}>{result.bmi}</p>
+              </div>
+              <span className={`text-lg font-bold px-4 py-2 rounded-xl ${styles.badge}`}>
+                {result.category}
+              </span>
+            </motion.div>
 
-          <BMIGauge bmi={result.bmi} category={result.category} />
+            <BMIGauge bmi={result.bmi} category={result.category} />
 
-          <p className="text-sm text-gray-600 leading-relaxed bg-white/60 rounded-xl p-4 border border-white">
-            {CATEGORY_INFO[result.category]}
-          </p>
-        </div>
-      )}
+            <motion.p
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.18 }}
+              className="text-sm text-gray-600 leading-relaxed bg-white/60 rounded-xl p-4 border border-white"
+            >
+              {CATEGORY_INFO[result.category]}
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Reference table */}
       <div className="mt-8 card">
@@ -286,13 +300,8 @@ export default function BMICalculatorPage() {
         </p>
       </div>
 
-      <style>{`
-        @keyframes fadeSlideUp {
-          from { opacity: 0; transform: translateY(10px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
+    </PageTransition>
   )
 }
 

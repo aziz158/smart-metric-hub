@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { TbRulerMeasure, TbWalk, TbSalad, TbDroplet, TbFlame, TbArrowRight } from 'react-icons/tb'
 import { GiMuscleUp } from 'react-icons/gi'
-import { MdStraighten } from 'react-icons/md'
 import { HiSparkles } from 'react-icons/hi'
 import CalculatorCard from '../components/CalculatorCard'
+import PageTransition from '../components/PageTransition'
 
 const calculators = [
   {
@@ -56,93 +57,169 @@ const stats = [
   { value: '0', label: 'Sign-ups Needed' },
 ]
 
+// ─── Animation variants ───────────────────────────────────────────────────────
+
+const heroContent = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+}
+const heroItem = {
+  hidden: { opacity: 0, y: 22 },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] } },
+}
+
+const cardGrid = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+}
+const cardItem = {
+  hidden: { opacity: 0, y: 24, scale: 0.97 },
+  show:   { opacity: 1, y: 0, scale: 1, transition: { duration: 0.38, ease: [0.25, 0.1, 0.25, 1] } },
+}
+
+const stepsGrid = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+}
+const stepItem = {
+  hidden: { opacity: 0, y: 20 },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] } },
+}
+
 export default function HomePage() {
   return (
-    <div>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20
-                          text-white text-sm font-medium px-4 py-2 rounded-full mb-6">
-            <HiSparkles />
-            All-in-one metric platform
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6">
-            Your Smart Hub for
-            <br />
-            <span className="text-blue-200">Health & Fitness Metrics</span>
-          </h1>
-
-          <p className="max-w-2xl mx-auto text-lg sm:text-xl text-blue-100 leading-relaxed mb-10">
-            Your all-in-one smart calculator platform for health, fitness, and daily metrics.
-            Fast, accurate, and completely free — no sign-up required.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/bmi-calculator" className="btn-primary bg-white text-blue-700 hover:bg-blue-50 text-base px-8 py-4">
-              Try BMI Calculator
-              <TbArrowRight className="text-lg" />
-            </Link>
-            <a
-              href="#calculators"
-              className="btn-secondary bg-white/10 text-white border border-white/20 hover:bg-white/20 text-base px-8 py-4"
+    <PageTransition>
+      <div>
+        {/* Hero */}
+        <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white overflow-hidden">
+          <motion.div
+            className="max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center"
+            variants={heroContent}
+            initial="hidden"
+            animate="show"
+          >
+            <motion.div variants={heroItem}
+              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20
+                         text-white text-sm font-medium px-4 py-2 rounded-full mb-6"
             >
-              Browse All Tools
-            </a>
-          </div>
+              <HiSparkles />
+              All-in-one metric platform
+            </motion.div>
 
-          {/* Stats */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mt-16">
-            {stats.map(({ value, label }) => (
-              <div key={label} className="text-center">
-                <div className="text-3xl font-extrabold text-white">{value}</div>
-                <div className="text-sm text-blue-200 mt-1">{label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            <motion.h1 variants={heroItem}
+              className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6"
+            >
+              Your Smart Hub for
+              <br />
+              <span className="text-blue-200">Health &amp; Fitness Metrics</span>
+            </motion.h1>
 
-      {/* Calculators grid */}
-      <section id="calculators" className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Calculator Tools</h2>
-          <p className="mt-3 text-gray-500 text-lg max-w-xl mx-auto">
-            Choose a calculator to get started. New tools are added regularly.
-          </p>
-        </div>
+            <motion.p variants={heroItem}
+              className="max-w-2xl mx-auto text-lg sm:text-xl text-blue-100 leading-relaxed mb-10"
+            >
+              Your all-in-one smart calculator platform for health, fitness, and daily metrics.
+              Fast, accurate, and completely free — no sign-up required.
+            </motion.p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {calculators.map((calc) => (
-            <CalculatorCard key={calc.title} {...calc} />
-          ))}
-        </div>
-      </section>
+            <motion.div variants={heroItem}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            >
+              <Link to="/bmi-calculator" className="btn-primary bg-white text-blue-700 hover:bg-blue-50 text-base px-8 py-4">
+                Try BMI Calculator
+                <TbArrowRight className="text-lg" />
+              </Link>
+              <a
+                href="#calculators"
+                className="btn-secondary bg-white/10 text-white border border-white/20 hover:bg-white/20 text-base px-8 py-4"
+              >
+                Browse All Tools
+              </a>
+            </motion.div>
 
-      {/* How it works */}
-      <section className="bg-gray-50 border-y border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">How It Works</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {[
-              { step: '1', title: 'Choose a Calculator', desc: 'Pick a tool from the homepage that matches your health or fitness need.' },
-              { step: '2', title: 'Enter Your Details', desc: 'Fill in your measurements using metric or imperial units — your choice.' },
-              { step: '3', title: 'Get Instant Results', desc: 'Receive accurate calculations with clear health insights in seconds.' },
-            ].map(({ step, title, desc }) => (
-              <div key={step} className="text-center flex flex-col items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white text-xl font-bold flex items-center justify-center shadow-lg shadow-blue-200">
-                  {step}
+            {/* Stats */}
+            <motion.div
+              variants={heroItem}
+              className="flex flex-col sm:flex-row items-center justify-center gap-8 mt-16"
+            >
+              {stats.map(({ value, label }) => (
+                <div key={label} className="text-center">
+                  <div className="text-3xl font-extrabold text-white">{value}</div>
+                  <div className="text-sm text-blue-200 mt-1">{label}</div>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
-              </div>
+              ))}
+            </motion.div>
+          </motion.div>
+        </section>
+
+        {/* Calculators grid */}
+        <section id="calculators" className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.4 }}
+          >
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Calculator Tools</h2>
+            <p className="mt-3 text-gray-500 text-lg max-w-xl mx-auto">
+              Choose a calculator to get started. New tools are added regularly.
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+            variants={cardGrid}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-40px' }}
+          >
+            {calculators.map((calc) => (
+              <motion.div key={calc.title} variants={cardItem}>
+                <CalculatorCard {...calc} />
+              </motion.div>
             ))}
+          </motion.div>
+        </section>
+
+        {/* How it works */}
+        <section className="bg-gray-50 border-y border-gray-100">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+            <motion.div
+              className="text-center mb-12"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+            >
+              <h2 className="text-3xl font-bold text-gray-900">How It Works</h2>
+            </motion.div>
+
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-3 gap-8"
+              variants={stepsGrid}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: '-40px' }}
+            >
+              {[
+                { step: '1', title: 'Choose a Calculator', desc: 'Pick a tool from the homepage that matches your health or fitness need.' },
+                { step: '2', title: 'Enter Your Details', desc: 'Fill in your measurements using metric or imperial units — your choice.' },
+                { step: '3', title: 'Get Instant Results', desc: 'Receive accurate calculations with clear health insights in seconds.' },
+              ].map(({ step, title, desc }) => (
+                <motion.div key={step} variants={stepItem}
+                  className="text-center flex flex-col items-center gap-4"
+                >
+                  <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white text-xl font-bold flex items-center justify-center shadow-lg shadow-blue-200">
+                    {step}
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </PageTransition>
   )
 }

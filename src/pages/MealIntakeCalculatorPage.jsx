@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   HiArrowLeft, HiCheck, HiChevronDown, HiChevronUp,
 } from 'react-icons/hi'
@@ -13,6 +14,7 @@ import {
   ACTIVITY_LEVELS, GOALS, MACRO_PRESETS,
 } from '../utils/mealCalc'
 import { lbsToKg, kmToMiles } from '../utils/treadmillCalc'
+import PageTransition from '../components/PageTransition'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -153,7 +155,11 @@ function ResultSection({ result, onRecalculate }) {
   const GoalIcon = goal.id === 'lose' ? TbTrendingDown : goal.id === 'gain' ? TbTrendingUp : TbScale
 
   return (
-    <div className="space-y-5 mt-6" style={{ animation: 'fadeSlideUp 0.3s ease-out' }}>
+    <motion.div
+      initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.32, ease: [0.25, 0.1, 0.25, 1] }}
+      className="space-y-5 mt-6"
+    >
       {/* Hero calorie card */}
       <div className={`rounded-2xl border p-6 ${gc.bg} ${gc.border}`}>
         <div className="flex items-start justify-between flex-wrap gap-4 mb-4">
@@ -310,10 +316,6 @@ function ResultSection({ result, onRecalculate }) {
       </button>
 
       <style>{`
-        @keyframes fadeSlideUp {
-          from { opacity: 0; transform: translateY(10px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
         .treadmill-range {
           -webkit-appearance: none; width: 100%; height: 6px;
           border-radius: 9999px;
@@ -330,7 +332,7 @@ function ResultSection({ result, onRecalculate }) {
           cursor: pointer; border: 3px solid white;
         }
       `}</style>
-    </div>
+    </motion.div>
   )
 }
 
@@ -393,6 +395,7 @@ export default function MealIntakeCalculatorPage() {
   const isMetric = unit === 'metric'
 
   return (
+    <PageTransition>
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
       <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition-colors mb-8 group">
         <HiArrowLeft className="group-hover:-translate-x-0.5 transition-transform" />
@@ -547,11 +550,17 @@ export default function MealIntakeCalculatorPage() {
       )}
 
       {/* Results */}
-      {result && (
-        <div id="results">
-          <ResultSection result={result} onRecalculate={() => { setShowForm(true); setResult(null) }} />
-        </div>
-      )}
+      <AnimatePresence>
+        {result && (
+          <motion.div id="results"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ResultSection result={result} onRecalculate={() => { setShowForm(true); setResult(null) }} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
+    </PageTransition>
   )
 }

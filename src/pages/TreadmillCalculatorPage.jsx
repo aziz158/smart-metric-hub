@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   HiArrowLeft, HiLightningBolt,
 } from 'react-icons/hi'
@@ -12,6 +13,7 @@ import {
   toSeconds, fmtDuration, fmtPace, secToHms,
   calcCalories, getActivity, getIntensity, PRESETS,
 } from '../utils/treadmillCalc'
+import PageTransition from '../components/PageTransition'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -293,8 +295,14 @@ function WorkoutTab() {
       <DurInput label="Duration" value={dur} onChange={setDur} />
 
       {/* Results */}
+      <AnimatePresence>
       {computed && (
-        <div className="space-y-4 pt-2 border-t border-gray-100" style={{ animation: 'fadeSlideUp 0.25s ease-out' }}>
+        <motion.div
+          key="workout-results"
+          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="space-y-4 pt-2 border-t border-gray-100"
+        >
           {/* Activity badge + intensity */}
           <div className="flex items-center justify-between flex-wrap gap-3">
             {computed.activity && (
@@ -355,8 +363,9 @@ function WorkoutTab() {
               Enter a duration to see distance, pace, and calorie results.
             </p>
           )}
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       {!computed && (
         <div className="py-8 text-center text-gray-400 text-sm">
@@ -420,12 +429,12 @@ function PaceTab() {
       <DurInput label="Time to Complete" value={dur} onChange={setDur} />
 
       {computed ? (
-        <div className="space-y-3 pt-2 border-t border-gray-100" style={{ animation: 'fadeSlideUp 0.25s ease-out' }}>
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }} className="space-y-3 pt-2 border-t border-gray-100">
           <div className="grid grid-cols-2 gap-3">
             <Metric icon={TbRun}            label="Pace / Mile"  primary={`${fmtPace(computed.paceSecPerMile)} /mi`} secondary={`${fmtPace(computed.paceSecPerKm)} /km`} iconColor="text-indigo-500" />
             <Metric icon={TbArrowsRightLeft} label="Avg Speed"   primary={`${computed.speedMph.toFixed(2)} mph`}    secondary={`${computed.speedKmh.toFixed(2)} km/h`}   iconColor="text-emerald-500" />
           </div>
-        </div>
+        </motion.div>
       ) : (
         <div className="py-8 text-center text-gray-400 text-sm">Enter distance and time to calculate pace.</div>
       )}
@@ -470,12 +479,12 @@ function DistanceTab() {
       <DurInput label="Duration" value={dur} onChange={setDur} />
 
       {computed ? (
-        <div className="space-y-3 pt-2 border-t border-gray-100" style={{ animation: 'fadeSlideUp 0.25s ease-out' }}>
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }} className="space-y-3 pt-2 border-t border-gray-100">
           <div className="grid grid-cols-2 gap-3">
             <Metric icon={TbRulerMeasure} label="Miles"      primary={`${computed.distMiles.toFixed(2)} mi`} iconColor="text-blue-500" />
             <Metric icon={TbRulerMeasure} label="Kilometers" primary={`${computed.distKm.toFixed(2)} km`}   iconColor="text-indigo-500" />
           </div>
-        </div>
+        </motion.div>
       ) : (
         <div className="py-8 text-center text-gray-400 text-sm">Enter speed and duration to calculate distance.</div>
       )}
@@ -531,9 +540,9 @@ function DurationTab() {
       </div>
 
       {computed ? (
-        <div className="pt-2 border-t border-gray-100" style={{ animation: 'fadeSlideUp 0.25s ease-out' }}>
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }} className="pt-2 border-t border-gray-100">
           <Metric icon={TbClock} label="Time Needed" primary={fmtDuration(computed.durSec)} secondary="to complete the distance" iconColor="text-blue-500" />
-        </div>
+        </motion.div>
       ) : (
         <div className="py-8 text-center text-gray-400 text-sm">Enter speed and distance to estimate your duration.</div>
       )}
@@ -554,6 +563,7 @@ export default function TreadmillCalculatorPage() {
   const [activeTab, setActiveTab] = useState('workout')
 
   return (
+    <PageTransition>
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
       <Link
         to="/"
@@ -581,11 +591,21 @@ export default function TreadmillCalculatorPage() {
       </div>
 
       {/* Tab content */}
-      <div className="card">
-        {activeTab === 'workout'  && <WorkoutTab />}
-        {activeTab === 'pace'     && <PaceTab />}
-        {activeTab === 'distance' && <DistanceTab />}
-        {activeTab === 'duration' && <DurationTab />}
+      <div className="card overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            {activeTab === 'workout'  && <WorkoutTab />}
+            {activeTab === 'pace'     && <PaceTab />}
+            {activeTab === 'distance' && <DistanceTab />}
+            {activeTab === 'duration' && <DurationTab />}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Info footer */}
@@ -595,10 +615,6 @@ export default function TreadmillCalculatorPage() {
       </p>
 
       <style>{`
-        @keyframes fadeSlideUp {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .treadmill-range {
@@ -635,5 +651,6 @@ export default function TreadmillCalculatorPage() {
         }
       `}</style>
     </div>
+    </PageTransition>
   )
 }

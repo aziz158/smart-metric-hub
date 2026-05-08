@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { HiArrowLeft, HiSearch, HiX } from 'react-icons/hi'
 import { TbFlame, TbClock, TbScale, TbRulerMeasure, TbActivity } from 'react-icons/tb'
 import { ACTIVITIES, CATEGORIES, COLOR_CLASSES } from '../data/activities'
@@ -9,6 +10,7 @@ import {
   INTENSITIES, INTENSITY_COLORS,
 } from '../utils/calorieCalc'
 import { lbsToKg, milesToKm, kmToMiles } from '../utils/treadmillCalc'
+import PageTransition from '../components/PageTransition'
 
 // ─── Shared UI ────────────────────────────────────────────────────────────────
 
@@ -152,6 +154,7 @@ export default function CalorieBurnedCalculatorPage() {
   const hasResult = computed && !computed.partial && computed.calories != null
 
   return (
+    <PageTransition>
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
       <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition-colors mb-8 group">
         <HiArrowLeft className="group-hover:-translate-x-0.5 transition-transform" />
@@ -329,8 +332,16 @@ export default function CalorieBurnedCalculatorPage() {
         </div>
       )}
 
+      <AnimatePresence mode="wait">
       {hasResult && (
-        <div className="card space-y-5" style={{ animation: 'fadeSlideUp 0.3s ease-out' }}>
+        <motion.div
+          key={`${activity?.id}-${intensity}`}
+          initial={{ opacity: 0, y: 14, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+          className="card space-y-5"
+        >
           {/* Hero */}
           <div className={`rounded-2xl p-5 border ${activityColor.active}`}>
             <div className="flex items-start justify-between flex-wrap gap-3 mb-3">
@@ -374,17 +385,15 @@ export default function CalorieBurnedCalculatorPage() {
             Calculated using: MET ({computed.met?.toFixed(1)}) × {computed.wKg.toFixed(1)} kg × {computed.dLabel}.
             MET values sourced from the Compendium of Physical Activities. Individual results vary by fitness level and effort.
           </p>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       <style>{`
-        @keyframes fadeSlideUp {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
+    </PageTransition>
   )
 }
