@@ -157,19 +157,21 @@ export default function UniversalConverterPage() {
         </div>
 
         {/* Category selector */}
-        <ArrowScroller className="mb-5">
-          {CATEGORIES.map((cat) => {
-            const Icon   = CAT_ICONS[cat.id]
-            const active = cat.id === categoryId
+        <ArrowScroller
+          className="mb-5"
+          items={CATEGORIES}
+          value={categoryId}
+          getId={(cat) => cat.id}
+          onChange={handleCategoryChange}
+          renderItem={(cat, isActive) => {
+            const Icon = CAT_ICONS[cat.id]
             return (
               <motion.button
-                key={cat.id}
-                type="button"
-                whileTap={{ scale: 0.95 }}
+                key={cat.id} type="button" whileTap={{ scale: 0.95 }}
                 onClick={() => handleCategoryChange(cat.id)}
                 className={`shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold
                             border transition-all duration-150 ${
-                  active
+                  isActive
                     ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
                     : 'bg-white text-gray-500 border-gray-200 hover:border-blue-300 hover:text-blue-600'
                 }`}
@@ -178,8 +180,8 @@ export default function UniversalConverterPage() {
                 {cat.label}
               </motion.button>
             )
-          })}
-        </ArrowScroller>
+          }}
+        />
 
         {/* Main converter card */}
         <AnimatePresence mode="wait">

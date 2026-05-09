@@ -586,11 +586,16 @@ export default function TreadmillCalculatorPage() {
       </div>
 
       {/* Tabs */}
-      <ArrowScroller className="mb-6">
-        {TABS.map(({ id, label }) => (
-          <TabBtn key={id} id={id} label={label} active={activeTab === id} onClick={setActiveTab} />
-        ))}
-      </ArrowScroller>
+      <ArrowScroller
+        className="mb-6"
+        items={TABS}
+        value={activeTab}
+        getId={(tab) => tab.id}
+        onChange={setActiveTab}
+        renderItem={(tab, isActive) => (
+          <TabBtn key={tab.id} id={tab.id} label={tab.label} active={isActive} onClick={setActiveTab} />
+        )}
+      />
 
       {/* Tab content */}
       <div className="card overflow-hidden">

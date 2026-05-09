@@ -376,21 +376,29 @@ export default function SleepCalculatorPage() {
 
         {/* Tabs + format toggle */}
         <div className="flex items-center gap-3 flex-wrap mb-5">
-          <ArrowScroller className="flex-1 min-w-0">
-            {TABS.map(({ id, label, icon: Icon }) => (
-              <button key={id} type="button" onClick={() => setActiveTab(id)}
-                className={`shrink-0 flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold rounded-xl
-                            transition-all duration-150 ${
-                  activeTab === id
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
-                }`}
-              >
-                <Icon className="text-base" />
-                {label}
-              </button>
-            ))}
-          </ArrowScroller>
+          <ArrowScroller
+            className="flex-1 min-w-0"
+            items={TABS}
+            value={activeTab}
+            getId={(tab) => tab.id}
+            onChange={setActiveTab}
+            renderItem={(tab, isActive) => {
+              const Icon = tab.icon
+              return (
+                <button key={tab.id} type="button" onClick={() => setActiveTab(tab.id)}
+                  className={`shrink-0 flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold rounded-xl
+                              transition-all duration-150 ${
+                    isActive
+                      ? 'bg-indigo-600 text-white shadow-sm'
+                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'
+                  }`}
+                >
+                  <Icon className="text-base" />
+                  {tab.label}
+                </button>
+              )
+            }}
+          />
           <FormatToggle value={timeFormat} onChange={setTimeFormat} />
         </div>
 

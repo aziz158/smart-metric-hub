@@ -195,19 +195,23 @@ export default function CalorieBurnedCalculatorPage() {
         </div>
 
         {/* Category tabs */}
-        <ArrowScroller>
-          {CATEGORIES.map((c) => (
+        <ArrowScroller
+          items={CATEGORIES}
+          value={category}
+          getId={(c) => c}
+          onChange={setCategory}
+          renderItem={(c, isActive) => (
             <button key={c} type="button" onClick={() => setCategory(c)}
               className={`shrink-0 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-150 ${
-                category === c
+                isActive
                   ? 'bg-blue-600 text-white border-blue-600'
                   : 'bg-white text-gray-500 border-gray-200 hover:border-blue-300 hover:text-blue-600'
               }`}
             >
               {c}
             </button>
-          ))}
-        </ArrowScroller>
+          )}
+        />
 
         {/* Activity grid */}
         {filtered.length > 0 ? (
