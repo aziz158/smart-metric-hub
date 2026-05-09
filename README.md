@@ -1,4 +1,4 @@
-﻿# Smart Metric Hub
+# Smart Metric Hub
 
 A modern, mobile-first React web application that brings together health, fitness, and everyday metric tools in one clean platform. Built for speed and simplicity — no sign-up, no tracking, just fast and accurate calculations.
 
@@ -90,8 +90,8 @@ smart-metric-hub/
     │   ├── PageTransition.jsx   # Route-level fade + slide wrapper
     │   └── ScrollFade.jsx       # Scroll-triggered in/out fade wrapper
     ├── data/
-    │   ├── activities.js        # 17 activities with MET values & icons
-    │   └── converterData.js     # 9 unit categories, factors & formatter
+    │   ├── activities.js        # 17 activities with MET values and icons
+    │   └── converterData.js     # 9 unit categories, factors and formatter
     ├── pages/
     │   ├── HomePage.jsx
     │   ├── BMICalculatorPage.jsx
@@ -103,9 +103,9 @@ smart-metric-hub/
     │   └── NotFoundPage.jsx
     ├── utils/
     │   ├── treadmillCalc.js     # Pace, speed, distance, MET helpers
-    │   ├── mealCalc.js          # BMR, TDEE, macro & water calculations
+    │   ├── mealCalc.js          # BMR, TDEE, macro and water calculations
     │   ├── sleepCalc.js         # Sleep cycle timing logic
-    │   └── calorieCalc.js       # MET-based calorie burn & intensity
+    │   └── calorieCalc.js       # MET-based calorie burn and intensity
     ├── App.jsx                  # Router + AnimatePresence setup
     ├── main.jsx
     └── index.css                # Tailwind directives + global utilities
@@ -121,9 +121,9 @@ Calculates Body Mass Index using the standard WHO formula for both metric and im
 ### Treadmill Calculator
 Four tabs covering every treadmill metric:
 - **Workout Summary** — enter speed, duration, incline, and body weight to get distance, pace, speed in both units, calories burned, and a workout intensity bar. Includes six quick-start presets.
-- **Pace & Speed** — distance + time → pace per mile and per km, average speed.
-- **Distance** — speed + time → distance in miles and km.
-- **Duration** — speed + distance → time needed.
+- **Pace & Speed** — distance + time to pace per mile and per km, average speed.
+- **Distance** — speed + time to distance in miles and km.
+- **Duration** — speed + distance to time needed.
 
 Calorie estimation uses MET values adjusted for treadmill incline.
 
@@ -133,7 +133,7 @@ Estimates daily nutrition targets using the **Mifflin-St Jeor** equation:
 1. BMR from age, gender, height, and weight
 2. TDEE via activity multiplier (Sedentary to Extremely Active)
 3. Calorie target adjusted for goal (-400 kcal lose / 0 maintain / +350 kcal gain)
-4. Macros split by goal (e.g. Lose Weight: 40% protein / 30% carbs / 30% fat)
+4. Macros split by goal (Lose Weight: 40% protein / 30% carbs / 30% fat)
 
 Macro ratios are fully adjustable with preset profiles (High Protein, Balanced, High Carb, Custom sliders). Water intake recommendation included.
 
@@ -173,10 +173,10 @@ The Swap button exchanges From/To units and seeds the result as the new input va
 
 ## Roadmap
 
-- [ ] Macro Calculator — detailed macronutrient planning
-- [ ] Water Intake Calculator — personalised daily hydration targets
-- [ ] Pace Calculator — running pace and race-finish predictor
-- [ ] Workout history — save results to local storage
+- [ ] Macro Calculator
+- [ ] Water Intake Calculator
+- [ ] Pace Calculator
+- [ ] Save workout and calculation history to local storage
 - [ ] Dark mode
 - [ ] Weekly analytics dashboard
 
