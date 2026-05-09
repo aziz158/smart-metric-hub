@@ -126,14 +126,22 @@ export default function ArrowScroller({
     }
 
     return (
-      <div ref={containerRef} className={`relative ${className}`}>
+      <div ref={containerRef} className={className}>
 
-        {/* Hidden measurement div — always contains all items at natural size */}
+        {/* Hidden measurement div — fixed off-screen so it never causes page scroll */}
         <div
           ref={measureRef}
-          className="invisible absolute top-0 left-0 flex gap-2 pointer-events-none"
           aria-hidden="true"
-          style={{ whiteSpace: 'nowrap' }}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: '-9999px',
+            visibility: 'hidden',
+            pointerEvents: 'none',
+            display: 'flex',
+            gap: '8px',
+            whiteSpace: 'nowrap',
+          }}
         >
           {items.map((item) => (
             <div key={getId(item)} style={{ flexShrink: 0 }}>
