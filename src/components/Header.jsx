@@ -10,6 +10,7 @@ const navLinks = [
   { to: '/meal-intake-calculator', label: 'Meal Intake' },
   { to: '/calorie-burned-calculator', label: 'Calories' },
   { to: '/sleep-calculator', label: 'Sleep' },
+  { to: '/universal-converter', label: 'Converter' },
 ]
 
 export default function Header() {

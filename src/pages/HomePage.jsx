@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { TbRulerMeasure, TbWalk, TbSalad, TbDroplet, TbFlame, TbArrowRight, TbMoon } from 'react-icons/tb'
+import { TbRulerMeasure, TbWalk, TbSalad, TbArrowsRightLeft, TbFlame, TbArrowRight, TbMoon } from 'react-icons/tb'
 import { HiSparkles } from 'react-icons/hi'
 import CalculatorCard from '../components/CalculatorCard'
 import PageTransition from '../components/PageTransition'
@@ -43,11 +43,11 @@ const calculators = [
     available: true,
   },
   {
-    icon: TbDroplet,
-    title: 'Water Intake Calculator',
-    description: 'Determine your optimal daily water intake based on body weight and activity.',
-    to: '/water-intake-calculator',
-    available: false,
+    icon: TbArrowsRightLeft,
+    title: 'Universal Converter',
+    description: 'Convert between units across 9 categories: length, weight, speed, temperature, and more.',
+    to: '/universal-converter',
+    available: true,
   },
 ]
 
