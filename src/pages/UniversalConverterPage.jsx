@@ -1,7 +1,7 @@
-import { useState, useMemo, useEffect, useCallback } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { HiArrowLeft, HiClipboard, HiCheck } from 'react-icons/hi'
+import { HiArrowLeft, HiClipboard, HiCheck, HiChevronLeft, HiChevronRight } from 'react-icons/hi'
 import {
   TbRuler, TbWeight, TbGauge, TbTemperature, TbClock,
   TbSquare, TbBolt, TbDroplet, TbWind, TbArrowsRightLeft,
@@ -57,6 +57,119 @@ function CopyButton({ text, unitId, copiedId, onCopy }) {
     >
       {done ? <HiCheck className="text-sm" /> : <HiClipboard className="text-sm" />}
     </button>
+  )
+}
+
+// ─── Category scroller with arrow buttons ────────────────────────────────────
+
+function CategoryScroller({ categoryId, onSelect }) {
+  const railRef = useRef(null)
+  const [canLeft,  setCanLeft]  = useState(false)
+  const [canRight, setCanRight] = useState(true)
+
+  function sync() {
+    const el = railRef.current
+    if (!el) return
+    setCanLeft(el.scrollLeft > 2)
+    setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 2)
+  }
+
+  useEffect(() => {
+    const el = railRef.current
+    if (!el) return
+    sync()
+    el.addEventListener('scroll', sync, { passive: true })
+    window.addEventListener('resize', sync)
+    return () => {
+      el.removeEventListener('scroll', sync)
+      window.removeEventListener('resize', sync)
+    }
+  }, [])
+
+  function scrollBy(dir) {
+    railRef.current?.scrollBy({ left: dir * 200, behavior: 'smooth' })
+  }
+
+  return (
+    <div className="relative mb-5">
+      {/* Left arrow + fade */}
+      <AnimatePresence>
+        {canLeft && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="absolute left-0 top-0 bottom-0 z-10 flex items-center"
+          >
+            <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+            <button
+              type="button"
+              onClick={() => scrollBy(-1)}
+              className="relative z-10 w-7 h-7 flex items-center justify-center rounded-full
+                         bg-white border border-gray-200 shadow-sm text-gray-500
+                         hover:border-blue-400 hover:text-blue-600 transition-colors"
+            >
+              <HiChevronLeft className="text-sm" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Scrollable rail */}
+      <div
+        ref={railRef}
+        className="flex gap-2 overflow-x-auto no-scrollbar px-1"
+        style={{ scrollbarWidth: 'none' }}
+      >
+        {/* Padding so chips don't hide behind arrows */}
+        {canLeft  && <div className="shrink-0 w-6" />}
+
+        {CATEGORIES.map((cat) => {
+          const Icon   = CAT_ICONS[cat.id]
+          const active = cat.id === categoryId
+          return (
+            <motion.button
+              key={cat.id}
+              type="button"
+              whileTap={{ scale: 0.95 }}
+              onClick={() => onSelect(cat.id)}
+              className={`shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold
+                          border transition-all duration-150 ${
+                active
+                  ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                  : 'bg-white text-gray-500 border-gray-200 hover:border-blue-300 hover:text-blue-600'
+              }`}
+            >
+              <Icon className="text-base" />
+              {cat.label}
+            </motion.button>
+          )
+        })}
+
+        {canRight && <div className="shrink-0 w-6" />}
+      </div>
+
+      {/* Right arrow + fade */}
+      <AnimatePresence>
+        {canRight && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="absolute right-0 top-0 bottom-0 z-10 flex items-center justify-end"
+          >
+            <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+            <button
+              type="button"
+              onClick={() => scrollBy(1)}
+              className="relative z-10 w-7 h-7 flex items-center justify-center rounded-full
+                         bg-white border border-gray-200 shadow-sm text-gray-500
+                         hover:border-blue-400 hover:text-blue-600 transition-colors"
+            >
+              <HiChevronRight className="text-sm" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   )
 }
 
@@ -156,29 +269,7 @@ export default function UniversalConverterPage() {
         </div>
 
         {/* Category selector */}
-        <div className="flex gap-2 overflow-x-auto pb-1 mb-5 no-scrollbar">
-          {CATEGORIES.map((cat) => {
-            const Icon    = CAT_ICONS[cat.id]
-            const active  = cat.id === categoryId
-            return (
-              <motion.button
-                key={cat.id}
-                type="button"
-                whileTap={{ scale: 0.95 }}
-                onClick={() => handleCategoryChange(cat.id)}
-                className={`shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold
-                            border transition-all duration-150 ${
-                  active
-                    ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                    : 'bg-white text-gray-500 border-gray-200 hover:border-blue-300 hover:text-blue-600'
-                }`}
-              >
-                <Icon className="text-base" />
-                {cat.label}
-              </motion.button>
-            )
-          })}
-        </div>
+        <CategoryScroller categoryId={categoryId} onSelect={handleCategoryChange} />
 
         {/* Main converter card */}
         <AnimatePresence mode="wait">
