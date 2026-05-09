@@ -15,6 +15,7 @@ import {
 } from '../utils/treadmillCalc'
 import PageTransition from '../components/PageTransition'
 import ScrollFade from '../components/ScrollFade'
+import ArrowScroller from '../components/ArrowScroller'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -230,7 +231,7 @@ function WorkoutTab() {
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2.5">
           Quick Presets
         </p>
-        <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+        <ArrowScroller>
           {PRESETS.map((p) => (
             <button
               key={p.label}
@@ -242,11 +243,11 @@ function WorkoutTab() {
               {p.label}
             </button>
           ))}
-        </div>
+        </ArrowScroller>
       </div>
 
       {/* Unit toggle */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-2">
         <span className="text-sm font-semibold text-gray-700">Units</span>
         <UnitToggle value={unit} onChange={setUnit} />
       </div>
@@ -403,10 +404,10 @@ function PaceTab() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-2">
         <span className="text-sm font-semibold text-gray-700">Distance unit</span>
         <div className="flex rounded-xl border border-gray-200 overflow-hidden w-fit">
-          {[['imperial', 'Miles'], ['metric', 'Kilometers']].map(([u, lbl]) => (
+          {[['imperial', 'Miles'], ['metric', 'km']].map(([u, lbl]) => (
             <button key={u} onClick={() => setUnit(u)}
               className={`px-4 py-2 text-sm font-semibold transition-colors ${
                 unit === u ? 'bg-blue-600 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'
@@ -464,7 +465,7 @@ function DistanceTab() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-2">
         <span className="text-sm font-semibold text-gray-700">Speed unit</span>
         <UnitToggle value={unit} onChange={setUnit} />
       </div>
@@ -516,7 +517,7 @@ function DurationTab() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-2">
         <span className="text-sm font-semibold text-gray-700">Units</span>
         <UnitToggle value={unit} onChange={setUnit} />
       </div>
@@ -585,11 +586,11 @@ export default function TreadmillCalculatorPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1.5 overflow-x-auto pb-1 mb-6 no-scrollbar">
+      <ArrowScroller className="mb-6">
         {TABS.map(({ id, label }) => (
           <TabBtn key={id} id={id} label={label} active={activeTab === id} onClick={setActiveTab} />
         ))}
-      </div>
+      </ArrowScroller>
 
       {/* Tab content */}
       <div className="card overflow-hidden">

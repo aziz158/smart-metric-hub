@@ -31,7 +31,7 @@ export function getMET(activity, intensity) {
 // Human-friendly intensity label + colour
 export const INTENSITIES = [
   { id: 'light',    label: 'Light',    desc: 'Easy effort',        color: 'emerald' },
-  { id: 'moderate', label: 'Moderate', desc: 'Conversational pace', color: 'blue' },
+  { id: 'moderate', label: 'Moderate', desc: 'Steady pace',         color: 'blue' },
   { id: 'intense',  label: 'Intense',  desc: 'Hard effort',         color: 'red' },
 ]
 

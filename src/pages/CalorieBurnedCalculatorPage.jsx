@@ -12,6 +12,7 @@ import {
 import { lbsToKg, milesToKm, kmToMiles } from '../utils/treadmillCalc'
 import PageTransition from '../components/PageTransition'
 import ScrollFade from '../components/ScrollFade'
+import ArrowScroller from '../components/ArrowScroller'
 
 // ─── Shared UI ────────────────────────────────────────────────────────────────
 
@@ -194,7 +195,7 @@ export default function CalorieBurnedCalculatorPage() {
         </div>
 
         {/* Category tabs */}
-        <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+        <ArrowScroller>
           {CATEGORIES.map((c) => (
             <button key={c} type="button" onClick={() => setCategory(c)}
               className={`shrink-0 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-150 ${
@@ -206,7 +207,7 @@ export default function CalorieBurnedCalculatorPage() {
               {c}
             </button>
           ))}
-        </div>
+        </ArrowScroller>
 
         {/* Activity grid */}
         {filtered.length > 0 ? (

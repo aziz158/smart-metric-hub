@@ -425,7 +425,7 @@ export default function MealIntakeCalculatorPage() {
           <div className="grid grid-cols-2 gap-5">
             <Field
               label="Age" name="age" value={form.age} onChange={set('age')}
-              unit="yrs" placeholder="e.g. 28" min={13} max={100} error={errors.age}
+              unit="yrs" placeholder="28" min={13} max={100} error={errors.age}
             />
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-semibold text-gray-700">Gender</label>

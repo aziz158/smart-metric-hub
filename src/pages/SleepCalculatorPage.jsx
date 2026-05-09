@@ -11,19 +11,81 @@ import {
 } from '../utils/sleepCalc'
 import PageTransition from '../components/PageTransition'
 import ScrollFade from '../components/ScrollFade'
+import ArrowScroller from '../components/ArrowScroller'
 
 // ─── Shared UI ────────────────────────────────────────────────────────────────
 
-function TimeInput({ label, value, onChange, hint }) {
+function TimeInput({ label, value, onChange, hint, fmt = '12h' }) {
+  const parts = value ? value.split(':') : null
+  const h24   = parts ? parseInt(parts[0]) : null
+  const min   = parts ? parseInt(parts[1]) : null
+  const isPM  = h24 !== null && h24 >= 12
+  const h12   = h24 !== null ? (h24 % 12 || 12) : null
+  const dispH = fmt === '12h' ? h12 : h24
+
+  function emit(newH24, newMin) {
+    if (newH24 === null || newMin === null) { onChange(''); return }
+    onChange(`${String(Math.max(0,newH24)).padStart(2,'0')}:${String(Math.max(0,newMin)).padStart(2,'0')}`)
+  }
+
+  function handleHour(e) {
+    const raw = e.target.value
+    if (raw === '') { onChange(''); return }
+    const n = parseInt(raw); if (isNaN(n)) return
+    if (fmt === '24h') {
+      emit(Math.min(23, Math.max(0, n)), min ?? 0)
+    } else {
+      const c = Math.min(12, Math.max(1, n))
+      emit(isPM ? (c % 12) + 12 : c % 12, min ?? 0)
+    }
+  }
+
+  function handleMin(e) {
+    const raw = e.target.value
+    if (raw === '') { onChange(''); return }
+    const n = parseInt(raw); if (isNaN(n)) return
+    const c = Math.min(59, Math.max(0, n))
+    if (fmt === '24h') {
+      emit(h24 ?? 0, c)
+    } else {
+      const h = (h12 ?? 12) % 12
+      emit(isPM ? h + 12 : h, c)
+    }
+  }
+
+  function togglePeriod(period) {
+    const h = (h12 ?? 12) % 12
+    emit(period === 'PM' ? h + 12 : h, min ?? 0)
+  }
+
+  const numCls = 'w-11 text-center text-lg font-semibold py-3 bg-transparent border-none outline-none ' +
+    '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-sm font-semibold text-gray-700">{label}</label>
-      <input
-        type="time"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="input-field text-lg font-semibold [color-scheme:light]"
-      />
+      {label && <label className="text-sm font-semibold text-gray-700">{label}</label>}
+      <div className="flex items-center rounded-xl border border-gray-200 bg-white overflow-hidden
+                      focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all">
+        <input type="number" min={fmt === '24h' ? 0 : 1} max={fmt === '24h' ? 23 : 12}
+          value={dispH ?? ''} onChange={handleHour}
+          placeholder={fmt === '24h' ? 'HH' : 'hh'} className={numCls} />
+        <span className="text-base font-bold text-gray-300 select-none">:</span>
+        <input type="number" min={0} max={59}
+          value={min ?? ''} onChange={handleMin}
+          placeholder="MM" className={numCls} />
+        {fmt === '12h' && (
+          <div className="flex border-l border-gray-100 ml-1">
+            {['AM', 'PM'].map((p) => (
+              <button key={p} type="button" onClick={() => togglePeriod(p)}
+                className={`px-2.5 py-2 text-xs font-bold transition-colors ${
+                  (p === 'PM') === isPM ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-gray-600'
+                }`}>
+                {p}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
       {hint && <p className="text-xs text-gray-400">{hint}</p>}
     </div>
   )
@@ -102,12 +164,8 @@ function BedtimeTab({ fmt }) {
         </p>
       </div>
 
-      <TimeInput
-        label="I want to wake up at"
-        value={wakeUp}
-        onChange={setWakeUp}
-        hint="Includes a 15-minute fall-asleep buffer"
-      />
+      <TimeInput label="I want to wake up at" value={wakeUp} onChange={setWakeUp}
+        hint="Includes a 15-minute fall-asleep buffer" fmt={fmt} />
 
       <AnimatePresence mode="wait">
         {results ? (
@@ -162,12 +220,8 @@ function WakeUpTab({ fmt }) {
       </p>
 
       <div className="space-y-3">
-        <TimeInput
-          label="I plan to sleep at"
-          value={bedtime}
-          onChange={setBedtime}
-          hint="Includes a 15-minute fall-asleep buffer"
-        />
+        <TimeInput label="I plan to sleep at" value={bedtime} onChange={setBedtime}
+          hint="Includes a 15-minute fall-asleep buffer" fmt={fmt} />
         <button type="button" onClick={sleepNow}
           className="flex items-center gap-2 text-sm font-semibold text-indigo-600
                      hover:text-indigo-700 transition-colors"
@@ -236,9 +290,9 @@ function DurationTab({ fmt }) {
         you completed and how restful your sleep was.
       </p>
 
-      <div className="grid grid-cols-2 gap-4">
-        <TimeInput label="I fell asleep at" value={start}  onChange={setStart}  />
-        <TimeInput label="I woke up at"     value={wakeUp} onChange={setWakeUp} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <TimeInput label="I fell asleep at" value={start}  onChange={setStart}  fmt={fmt} />
+        <TimeInput label="I woke up at"     value={wakeUp} onChange={setWakeUp} fmt={fmt} />
       </div>
 
       <AnimatePresence mode="wait">
@@ -321,8 +375,8 @@ export default function SleepCalculatorPage() {
         </div>
 
         {/* Tabs + format toggle */}
-        <div className="flex items-center justify-between gap-3 flex-wrap mb-5">
-          <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
+        <div className="flex items-center gap-3 flex-wrap mb-5">
+          <ArrowScroller className="flex-1 min-w-0">
             {TABS.map(({ id, label, icon: Icon }) => (
               <button key={id} type="button" onClick={() => setActiveTab(id)}
                 className={`shrink-0 flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold rounded-xl
@@ -336,7 +390,7 @@ export default function SleepCalculatorPage() {
                 {label}
               </button>
             ))}
-          </div>
+          </ArrowScroller>
           <FormatToggle value={timeFormat} onChange={setTimeFormat} />
         </div>
 
